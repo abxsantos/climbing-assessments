@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let isCountingDown = false;
 
     if (countdownElement && startStopButton && stateElement && repetitionElement) {
-        const oneMinute = 3; // 1 minute in seconds
+        const oneMinute = 10; // 1 minute in seconds
         const sevenSeconds = 7; // 7 seconds
         const threeSeconds = 3; // 3 seconds
 
