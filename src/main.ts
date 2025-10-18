@@ -8,7 +8,8 @@ if (appElement) {
   <div class="card">
     <div id="timer">
         <h2>Timer 7:3</h2>
-        <h1 id="state">Preparing</h1>
+                <h1 id="state">Preparing</h1>
+                <h1 id="sps">SPS: 0</h1>
         <h1 id="countdown">00:00</h1>
         <p id="repetition">1/24</p>
         <button id="startStopButton">Start</button>

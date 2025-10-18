@@ -8,6 +8,9 @@ const connectedDevices: (Climbro | Entralpi | ForceBoard | Motherboard | mySmart
 let chartElement: HTMLCanvasElement | null = null
 let chart: Chart | null = null
 let chartHeight = 0
+// For samples-per-second (SPS) calculation
+let spsElement: HTMLElement | null = null
+const sampleTimestamps: number[] = []
 
 /**
  * Sets up the device selection functionality and event listeners for streaming, tare, and download actions.
@@ -19,6 +22,9 @@ export function setupDevice(massesElement: HTMLDivElement, outputElement: HTMLDi
   let isStreaming = true
 
   addNewDeviceSelect()
+
+  // Cache SPS element if present
+  spsElement = document.getElementById("sps")
 
   /**
    * Function to add a new device select element for selecting another device.
@@ -223,6 +229,19 @@ export function setupDevice(massesElement: HTMLDivElement, outputElement: HTMLDi
           // Chart
           addChartData(device, data.massTotal, data.massMax, data.massAverage)
           chartHeight = Number(data.massMax)
+          // SPS tracking: record timestamp and compute samples per second
+          const now = Date.now()
+          sampleTimestamps.push(now)
+          // keep only last 2 seconds of samples for smoothing
+          const windowMs = 2000
+          while (sampleTimestamps.length && now - sampleTimestamps[0] > windowMs) {
+            sampleTimestamps.shift()
+          }
+          if (spsElement) {
+            const seconds = Math.max((now - (sampleTimestamps[0] || now)) / 1000, 0.001)
+            const sps = (sampleTimestamps.length / seconds) || 0
+            spsElement.textContent = `SPS: ${sps.toFixed(1)}`
+          }
           // HTML
           addMassHTML(device.id, data)
         })
